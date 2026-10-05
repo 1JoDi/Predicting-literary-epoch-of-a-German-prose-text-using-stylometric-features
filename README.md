@@ -70,7 +70,7 @@ already exist are not computed again.
 
 ## Installation
 
-Python 3.10 or newer is required. In the project folder:
+The project was developed and tested with **Python 3.14.0**. In the project folder:
 
 **Windows (PowerShell or cmd)**
 
@@ -209,3 +209,9 @@ repository, and neither are any derived files: everything in `data/`
 and `results/` is created by running the code. The Gutenberg catalog is
 used under the
 [Project Gutenberg terms](https://www.gutenberg.org/policy/terms_of_use.html).
+
+## Author
+
+Joel Dick (single-author project), B.A. Computerlinguistik,
+Heinrich-Heine-Universität Düsseldorf. Final project for the course
+*Advanced Python for NLP* (Rainer Osswald, Yulia Zinova), 2026.
