@@ -1,0 +1,12 @@
+# Install with:  pip install -r requirements.txt
+# Then download the German spaCy model:
+#   python -m spacy download de_core_news_lg
+matplotlib>=3.8
+numpy>=1.26
+pandas>=2.2
+PyYAML>=6.0
+requests>=2.31
+scikit-learn>=1.5
+scipy>=1.11
+spacy>=3.8,<3.9
+pytest>=8.0

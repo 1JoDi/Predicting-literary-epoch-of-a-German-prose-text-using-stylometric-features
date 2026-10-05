@@ -1,0 +1,149 @@
+# Configuration for the stylometric epoch classification pipeline.
+#
+# All tunable values live here, so the Python code contains logic only
+# (see course notebook 06-04 "Config files and command-line arguments").
+# Paths are relative to the project root.
+
+paths:
+  catalog_file: data/raw/pg_catalog.csv
+  texts_dir: data/raw/texts
+  candidates_file: data/processed/candidates.csv
+  corpus_file: data/processed/corpus_metadata.csv
+  features_file: data/processed/features.csv
+  results_dir: results
+
+gutenberg:
+  catalog_url: https://www.gutenberg.org/cache/epub/feeds/pg_catalog.csv
+  # {id} is replaced by the Gutenberg ebook number.
+  text_url: https://www.gutenberg.org/cache/epub/{id}/pg{id}.txt
+  # Seconds to wait between two downloads (be polite to the server).
+  request_delay: 2.0
+  timeout: 60
+  user_agent: "stylometry-epochs student project (HHU Duesseldorf)"
+
+corpus:
+  language: de
+  # Library of Congress class "PT" = German literature.  This removes
+  # translations and non-literary books (science, history, ...).
+  locc_prefix: PT
+  # A book is dropped if one of these words occurs in its title, subjects
+  # or bookshelves (case-insensitive).  Goal: keep narrative prose only.
+  exclude_keywords:
+    # drama
+    - drama
+    - schauspiel
+    - trauerspiel
+    - lustspiel
+    - tragödie
+    - komödie
+    - posse
+    - plays
+    - theater
+    - oper
+    - libretto
+    # poetry
+    - gedicht
+    - poetry
+    - poems
+    - lyrik
+    - ballade
+    - lieder
+    - sonett
+    - epigramm
+    - verse
+    - epos
+    # non-fiction / mixed volumes
+    - briefe
+    - letters
+    - correspondence
+    - biography
+    - history and criticism
+    - aufsätze
+    - essays
+    - reden
+    - tagebuch
+    - diaries
+    - sämtliche werke
+    - gesammelte werke
+    - anthologie
+    - anthologies
+    - reise
+    - travel
+  max_texts_per_author: 3
+  # Upper limit per epoch, so that the classes stay roughly balanced.
+  max_texts_per_epoch: 120
+  # Texts with fewer words (after cleaning) are skipped.
+  min_words: 15000
+  seed: 42
+
+# Epochs are assigned by the author's death year: a text belongs to the
+# first epoch whose max_death_year is >= the death year.  Death year is a
+# proxy for the (unknown) publication date, see report section 3.
+epochs:
+  min_death_year: 1720
+  bins:
+    - name: Goethezeit
+      max_death_year: 1860
+    - name: Realismus
+      max_death_year: 1910
+    - name: Moderne
+      max_death_year: 1960
+
+sampling:
+  # Skip the first part of the text (title page, preface, table of
+  # contents), then take a contiguous passage of sample_words words.
+  skip_fraction: 0.1
+  sample_words: 10000
+
+features:
+  spacy_model: de_core_news_lg
+  batch_size: 4
+  # Keep 1 on Windows; >1 uses several CPU cores via multiprocessing.
+  n_process: 1
+  sttr_window: 1000
+  function_word_pos:
+    - DET
+    - ADP
+    - CCONJ
+    - SCONJ
+  # Titles and forms of address that are removed from person names
+  # before counting distinct characters.
+  person_titles:
+    - herr
+    - herrn
+    - frau
+    - fräulein
+    - frl
+    - fürst
+    - fürstin
+    - graf
+    - gräfin
+    - baron
+    - baronin
+    - doktor
+    - dr
+    - professor
+    - pastor
+    - onkel
+    - tante
+    - könig
+    - königin
+    - prinz
+    - prinzessin
+    - sankt
+    - st
+    - von
+    - der
+    - die
+    - den
+    - dem
+  # A character must be mentioned at least this often to be counted
+  # (removes one-off NER errors).
+  min_person_mentions: 2
+
+classification:
+  # 1 / n_test_folds of the authors are held out as test set.
+  n_test_folds: 5
+  cv_folds: 5
+  seed: 42
+  permutation_repeats: 30
