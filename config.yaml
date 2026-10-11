@@ -1,7 +1,5 @@
 # Configuration for the stylometric epoch classification pipeline.
 #
-# All tunable values live here, so the Python code contains logic only
-# (see course notebook 06-04 "Config files and command-line arguments").
 # Paths are relative to the project root.
 
 paths:
@@ -110,10 +108,14 @@ features:
   # before counting distinct characters.
   person_titles:
     - herr
+    - hr
     - herrn
     - frau
+    - fr
     - fräulein
     - frl
+    - freiherr
+    - freiherrin
     - fürst
     - fürstin
     - graf
@@ -123,6 +125,7 @@ features:
     - doktor
     - dr
     - professor
+    - prof
     - pastor
     - onkel
     - tante
